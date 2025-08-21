@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Sistema Financiero</title>
+  <style>
+    :root {
+      --primary: #1abc9c;
+      --secondary: #16a085;
+      --dark: #2c3e50;
+      --light: #ecf0f1;
+      --danger: #e74c3c;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, var(--primary), var(--dark));
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      color: var(--light);
+    }
+
+    .login-container {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+      width: 100%;
+      max-width: 420px;
+      padding: 40px;
+      backdrop-filter: blur(12px);
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .login-header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .login-header h1 {
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .login-header p {
+      font-size: 14px;
+      color: #bdc3c7;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      font-size: 15px;
+      outline: none;
+      transition: 0.3s;
+      background: rgba(255, 255, 255, 0.9);
+      color: #333;
+    }
+
+    .form-control:focus {
+      box-shadow: 0 0 0 3px rgba(26, 188, 156, 0.4);
+    }
+
+    .password-container {
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 12px;
+      cursor: pointer;
+      color: #555;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      background: var(--primary);
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+      color: white;
+    }
+
+    .btn:hover {
+      background: var(--secondary);
+    }
+
+    .alert {
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 15px;
+      display: none;
+      text-align: center;
+    }
+
+    .alert-danger {
+      background: var(--danger);
+      color: white;
+    }
+
+    .login-footer {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 13px;
+      color: #bdc3c7;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-header">
+      <h1>💰 Sistema Financiero</h1>
+      <p>Ingrese sus credenciales</p>
+    </div>
+
+    <div id="error-message" class="alert alert-danger">
+      Usuario o contraseña incorrectos
+    </div>
+
+    <form id="login-form">
+      <div class="form-group">
+        <label for="username">Usuario o Correo</label>
+        <input type="text" id="username" class="form-control" placeholder="Ingrese su usuario" required>
+      </div>
+
+      <div class="form-group password-container">
+        <label for="password">Contraseña</label>
+        <input type="password" id="password" class="form-control" placeholder="Ingrese su contraseña" required>
+        <span class="toggle-password" onclick="togglePassword()">👁️</span>
+      </div>
+
+      <button type="submit" class="btn">Iniciar Sesión</button>
+    </form>
+
+    <div class="login-footer">
+      <p>¿Problemas para acceder? Contacte al administrador</p>
+    </div>
+  </div>
+
+  <script>
+    const usuarios = [
+      { username: "admin", password: "admin123", role: "admin" },
+      { username: "juan", password: "user123", role: "usuario" }
+    ];
+
+    const loginForm = document.getElementById("login-form");
+    const errorMessage = document.getElementById("error-message");
+
+    loginForm.addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+
+      const user = usuarios.find(u => u.username === username && u.password === password);
+
+      if (user) {
+        localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("username", user.username);
+        localStorage.setItem("role", user.role);
+
+        if (user.role === "admin") {
+          window.location.href = "admin-dashboard.html";
+        } else {
+          window.location.href = "sistema-financiero.html";
+        }
+      } else {
+        errorMessage.style.display = "block";
+        setTimeout(() => {
+          errorMessage.style.display = "none";
+        }, 3000);
+      }
+    });
+
+    function togglePassword() {
+      const passInput = document.getElementById("password");
+      passInput.type = passInput.type === "password" ? "text" : "password";
+    }
+
+    if (localStorage.getItem("isLoggedIn") === "true") {
+      if (localStorage.getItem("role") === "admin") {
+        window.location.href = "admin-dashboard.html";
+      } else {
+        window.location.href = "sistema-financiero.html";
+      }
+    }
+  </script>
+</body>
+</html>

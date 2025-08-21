@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Financiero - Gestión de Contratos</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">Sistema <span>Financiero</span></div>
+                <ul class="nav-links">
+                    <li><a href="#" class="active">Inicio</a></li>
+                    <li><a href="#">Reportes</a></li>
+                    <li><a href="#">Configuración</a></li>
+                    <li><a href="#" id="logout-btn">Cerrar Sesión</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="main-content">
+            <div class="sidebar">
+                <ul class="sidebar-menu">
+                    <li><a href="#" class="active" data-section="dashboard">Dashboard</a></li>
+                    <li><a href="#" data-section="transactions">Transacciones</a></li>
+                    <li><a href="#" data-section="contracts">Contratos</a></li>
+                    <li><a href="#" data-section="clients">Clientes</a></li>
+                    <li><a href="#" data-section="reports">Reportes Semanales</a></li>
+                    <li><a href="#" data-section="goals">Metas</a></li>
+                    <li><a href="#" data-section="settings">Ajustes</a></li>
+                </ul>
+            </div>
+
+            <div class="content">
+                <!-- Dashboard Section -->
+                <div id="dashboard-section">
+                    <h2 class="section-title">Dashboard Financiero</h2>
+                    
+                    <div class="week-selector">
+                        <button class="btn btn-primary" id="prev-week">←</button>
+                        <select id="week-select">
+                            <!-- Weeks will be populated by JavaScript -->
+                        </select>
+                        <button class="btn btn-primary" id="next-week">→</button>
+                        <button class="btn btn-success" id="add-week-btn" style="margin-left: auto;">Nueva Semana</button>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card income">
+                            <h3>Ingresos de la Semana</h3>
+                            <div class="value" id="week-income">$0.00</div>
+                        </div>
+                        <div class="stat-card expense">
+                            <h3>Gastos de la Semana</h3>
+                            <div class="value" id="week-expenses">$0.00</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Balance Semanal</h3>
+                            <div class="value" id="week-balance">$0.00</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Presupuesto Restante</h3>
+                            <div class="value" id="week-budget">$0.00</div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>Resumen de Transacciones Recientes</h3>
+                        <table id="recent-transactions">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Descripción</th>
+                                    <th>Categoría</th>
+                                    <th>Tipo</th>
+                                    <th>Monto</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Transactions will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>Distribución de Gastos por Categoría</h3>
+                        <div id="expenses-chart">
+                            <!-- Chart will be populated by JavaScript -->
+                            <p>No hay datos suficientes para mostrar el gráfico.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Transactions Section -->
+                <div id="transactions-section" class="hidden">
+                    <h2 class="section-title">Gestión de Transacciones</h2>
+                    
+                    <button class="btn btn-primary" id="add-transaction-btn">Agregar Transacción</button>
+                    
+                    <div class="card">
+                        <h3>Filtrar Transacciones</h3>
+                        <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                            <select id="filter-type" class="form-control">
+                                <option value="all">Todos los tipos</option>
+                                <option value="income">Ingresos</option>
+                                <option value="expense">Gastos</option>
+                            </select>
+                            <select id="filter-category" class="form-control">
+                                <option value="all">Todas las categorías</option>
+                                <!-- Categories will be populated by JavaScript -->
+                            </select>
+                            <select id="filter-week" class="form-control">
+                                <option value="all">Todas las semanas</option>
+                                <!-- Weeks will be populated by JavaScript -->
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>Lista de Transacciones</h3>
+                        <table id="transactions-table">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Descripción</th>
+                                    <th>Categoría</th>
+                                    <th>Tipo</th>
+                                    <th>Monto</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Transactions will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Contracts Section -->
+                <div id="contracts-section" class="hidden">
+                    <h2 class="section-title">Gestión de Contratos</h2>
+                    
+                    <button class="btn btn-success" id="add-contract-btn">Nuevo Contrato</button>
+                    <button class="btn btn-primary" id="view-contracts-btn">Ver Contratos</button>
+                    
+                    <div class="card">
+                        <h3>Buscar Contratos</h3>
+                        <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                            <input type="text" id="search-contract" class="form-control" placeholder="Buscar por nombre, folio o estado">
+                            <select id="filter-status" class="form-control">
+                                <option value="all">Todos los estados</option>
+                                <option value="activo">Activo</option>
+                                <option value="pendiente">Pendiente</option>
+                                <option value="completado">Completado</option>
+                                <option value="cancelado">Cancelado</option>
+                            </select>
+                            <button class="btn btn-primary" id="search-btn">Buscar</button>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>Lista de Contratos</h3>
+                        <table id="contracts-table">
+                            <thead>
+                                <tr>
+                                    <th>Folio</th>
+                                    <th>Cliente</th>
+                                    <th>Monto</th>
+                                    <th>Fecha</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Contracts will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Clients Section -->
+                <div id="clients-section" class="hidden">
+                    <h2 class="section-title">Gestión de Clientes</h2>
+                    
+                    <button class="btn btn-success" id="add-client-btn">Nuevo Cliente</button>
+                    
+                    <div class="card">
+                        <h3>Buscar Clientes</h3>
+                        <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                            <input type="text" id="search-client" class="form-control" placeholder="Buscar por nombre, teléfono o email">
+                            <button class="btn btn-primary" id="search-client-btn">Buscar</button>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>Lista de Clientes</h3>
+                        <table id="clients-table">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Teléfono</th>
+                                    <th>Email</th>
+                                    <th>Contratos</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Clients will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modales (transaction-modal, week-modal, contract-modal, view-contract-modal, logout-modal) -->
+    <!-- Estos se mantienen igual que en el código original -->
+
+    <script src="js/main.js"></script>
+</body>
+</html>

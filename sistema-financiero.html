@@ -1,0 +1,1821 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Financiero - Gestión de Contratos</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --success: #2ecc71;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .logo span {
+            color: var(--secondary);
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 20px;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+        
+        .nav-links a:hover, .nav-links a.active {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 3fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .sidebar {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+        }
+        
+        .sidebar-menu li {
+            margin-bottom: 10px;
+        }
+        
+        .sidebar-menu a {
+            display: block;
+            padding: 10px 15px;
+            color: var(--dark);
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+        
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background: var(--light);
+            color: var(--secondary);
+        }
+        
+        .content {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .section-title {
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light);
+            color: var(--primary);
+        }
+        
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .stat-card h3 {
+            font-size: 14px;
+            color: #777;
+            margin-bottom: 10px;
+        }
+        
+        .stat-card .value {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .stat-card.income .value {
+            color: var(--success);
+        }
+        
+        .stat-card.expense .value {
+            color: var(--danger);
+        }
+        
+        .btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2980b9;
+        }
+        
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #27ae60;
+        }
+        
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+        
+        .btn-warning {
+            background: var(--warning);
+            color: white;
+        }
+        
+        .btn-warning:hover {
+            background: #e67e22;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        
+        table th, table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        table th {
+            background: var(--light);
+            font-weight: 600;
+        }
+        
+        table tr:hover {
+            background: #f9f9f9;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        .form-control:focus {
+            border-color: var(--secondary);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 20px 0;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .modal-header h2 {
+            color: var(--primary);
+        }
+        
+        .close {
+            font-size: 24px;
+            cursor: pointer;
+            color: #777;
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-danger {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .week-selector {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .week-selector select {
+            margin: 0 10px;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-bottom: none;
+            border-radius: 4px 4px 0 0;
+            margin-right: 5px;
+        }
+        
+        .tab.active {
+            background: white;
+            border-bottom: 1px solid white;
+            margin-bottom: -1px;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .contract-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+        }
+        
+        .contract-section h3 {
+            margin-bottom: 15px;
+            color: var(--primary);
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .logout-confirm-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .logout-confirm-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">Sistema <span>Financiero</span></div>
+                <ul class="nav-links">
+                    <li><a href="#" class="active">Inicio</a></li>
+                    <li><a href="#">Reportes</a></li>
+                    <li><a href="#">Configuración</a></li>
+                    <li><a href="#" id="logout-btn">Cerrar Sesión</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="main-content">
+            <div class="sidebar">
+                <ul class="sidebar-menu">
+                    <li><a href="#" class="active" data-section="dashboard">Dashboard</a></li>
+                    <li><a href="#" data-section="transactions">Transacciones</a></li>
+                    <li><a href="#" data-section="contracts">Contratos</a></li>
+                    <li><a href="#" data-section="clients">Clientes</a></li>
+                    <li><a href="#" data-section="reports">Reportes Semanales</a></li>
+                    <li><a href="#" data-section="goals">Metas</a></li>
+                    <li><a href="#" data-section="settings">Ajustes</a></li>
+                </ul>
+            </div>
+
+            <div class="content">
+                <!-- Dashboard Section -->
+                <div id="dashboard-section">
+                    <h2 class="section-title">Dashboard Financiero</h2>
+                    
+                    <div class="week-selector">
+                        <button class="btn btn-primary" id="prev-week">←</button>
+                        <select id="week-select">
+                            <!-- Weeks will be populated by JavaScript -->
+                        </select>
+                        <button class="btn btn-primary" id="next-week">→</button>
+                        <button class="btn btn-success" id="add-week-btn" style="margin-left: auto;">Nueva Semana</button>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card income">
+                            <h3>Ingresos de la Semana</h3>
+                            <div class="value" id="week-income">$0.00</div>
+                        </div>
+                        <div class="stat-card expense">
+                            <h3>Gastos de la Semana</h3>
+                            <div class="value" id="week-expenses">$0.00</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Balance Semanal</h3>
+                            <div class="value" id="week-balance">$0.00</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Presupuesto Restante</h3>
+                            <div class="value" id="week-budget">$0.00</div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>Resumen de Transacciones Recientes</h3>
+                        <table id="recent-transactions">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Descripción</th>
+                                    <th>Categoría</th>
+                                    <th>Tipo</th>
+                                    <th>Monto</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Transactions will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>Distribución de Gastos por Categoría</h3>
+                        <div id="expenses-chart">
+                            <!-- Chart will be populated by JavaScript -->
+                            <p>No hay datos suficientes para mostrar el gráfico.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Transactions Section -->
+                <div id="transactions-section" class="hidden">
+                    <h2 class="section-title">Gestión de Transacciones</h2>
+                    
+                    <button class="btn btn-primary" id="add-transaction-btn">Agregar Transacción</button>
+                    
+                    <div class="card">
+                        <h3>Filtrar Transacciones</h3>
+                        <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                            <select id="filter-type" class="form-control">
+                                <option value="all">Todos los tipos</option>
+                                <option value="income">Ingresos</option>
+                                <option value="expense">Gastos</option>
+                            </select>
+                            <select id="filter-category" class="form-control">
+                                <option value="all">Todas las categorías</option>
+                                <!-- Categories will be populated by JavaScript -->
+                            </select>
+                            <select id="filter-week" class="form-control">
+                                <option value="all">Todas las semanas</option>
+                                <!-- Weeks will be populated by JavaScript -->
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>Lista de Transacciones</h3>
+                        <table id="transactions-table">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Descripción</th>
+                                    <th>Categoría</th>
+                                    <th>Tipo</th>
+                                    <th>Monto</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Transactions will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Contracts Section -->
+                <div id="contracts-section" class="hidden">
+                    <h2 class="section-title">Gestión de Contratos</h2>
+                    
+                    <button class="btn btn-success" id="add-contract-btn">Nuevo Contrato</button>
+                    <button class="btn btn-primary" id="view-contracts-btn">Ver Contratos</button>
+                    
+                    <div class="card">
+                        <h3>Buscar Contratos</h3>
+                        <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                            <input type="text" id="search-contract" class="form-control" placeholder="Buscar por nombre, folio o estado">
+                            <select id="filter-status" class="form-control">
+                                <option value="all">Todos los estados</option>
+                                <option value="activo">Activo</option>
+                                <option value="pendiente">Pendiente</option>
+                                <option value="completado">Completado</option>
+                                <option value="cancelado">Cancelado</option>
+                            </select>
+                            <button class="btn btn-primary" id="search-btn">Buscar</button>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>Lista de Contratos</h3>
+                        <table id="contracts-table">
+                            <thead>
+                                <tr>
+                                    <th>Folio</th>
+                                    <th>Cliente</th>
+                                    <th>Monto</th>
+                                    <th>Fecha</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Contracts will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Clients Section -->
+                <div id="clients-section" class="hidden">
+                    <h2 class="section-title">Gestión de Clientes</h2>
+                    
+                    <button class="btn btn-success" id="add-client-btn">Nuevo Cliente</button>
+                    
+                    <div class="card">
+                        <h3>Buscar Clientes</h3>
+                        <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                            <input type="text" id="search-client" class="form-control" placeholder="Buscar por nombre, teléfono o email">
+                            <button class="btn btn-primary" id="search-client-btn">Buscar</button>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>Lista de Clientes</h3>
+                        <table id="clients-table">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Teléfono</th>
+                                    <th>Email</th>
+                                    <th>Contratos</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Clients will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- More sections would be here in a complete implementation -->
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Transaction Modal -->
+    <div id="transaction-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Agregar Transacción</h2>
+                <span class="close">&times;</span>
+            </div>
+            <form id="transaction-form">
+                <div class="form-group">
+                    <label for="transaction-date">Fecha</label>
+                    <input type="date" id="transaction-date" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="transaction-description">Descripción</label>
+                    <input type="text" id="transaction-description" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="transaction-type">Tipo</label>
+                    <select id="transaction-type" class="form-control" required>
+                        <option value="income">Ingreso</option>
+                        <option value="expense">Gasto</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="transaction-category">Categoría</label>
+                    <select id="transaction-category" class="form-control" required>
+                        <!-- Categories will be populated by JavaScript -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="transaction-amount">Monto</label>
+                    <input type="number" id="transaction-amount" class="form-control" step="0.01" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="transaction-week">Semana</label>
+                    <select id="transaction-week" class="form-control" required>
+                        <!-- Weeks will be populated by JavaScript -->
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-success">Guardar Transacción</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Week Modal -->
+    <div id="week-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Nueva Semana Financiera</h2>
+                <span class="close">&times;</span>
+            </div>
+            <form id="week-form">
+                <div class="form-group">
+                    <label for="week-start">Fecha de Inicio</label>
+                    <input type="date" id="week-start" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="week-budget-input">Presupuesto Semanal</label>
+                    <input type="number" id="week-budget-input" class="form-control" step="0.01" min="0" required>
+                </div>
+                <button type="submit" class="btn btn-success">Crear Semana</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Contract Modal -->
+    <div id="contract-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Nuevo Contrato</h2>
+                <span class="close">&times;</span>
+            </div>
+            <form id="contract-form">
+                <div class="tabs">
+                    <div class="tab active" data-tab="client-data">Datos del Cliente</div>
+                    <div class="tab" data-tab="aval-data">Datos del Aval</div>
+                    <div class="tab" data-tab="contract-data">Datos del Contrato</div>
+                </div>
+                
+                <div class="tab-content active" id="client-data">
+                    <div class="contract-section">
+                        <h3>Información Personal del Cliente</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="client-name">Nombre completo</label>
+                                <input type="text" id="client-name" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="client-birthdate">Fecha de nacimiento</label>
+                                <input type="date" id="client-birthdate" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="client-voter-id">Clave de elector</label>
+                                <input type="text" id="client-voter-id" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="contract-section">
+                        <h3>Dirección del Cliente</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="client-address">Domicilio</label>
+                                <input type="text" id="client-address" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="client-neighborhood">Colonia</label>
+                                <input type="text" id="client-neighborhood" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="client-zip">Código postal</label>
+                                <input type="text" id="client-zip" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="client-municipality">Municipio</label>
+                                <input type="text" id="client-municipality" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="client-state">Estado</label>
+                                <input type="text" id="client-state" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="contract-section">
+                        <h3>Contacto del Cliente</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="client-phone">Teléfono de casa</label>
+                                <input type="tel" id="client-phone" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="client-cellphone">Teléfono celular</label>
+                                <input type="tel" id="client-cellphone" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="client-message-phone">Teléfono de recados</label>
+                                <input type="tel" id="client-message-phone" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="client-email">Correo electrónico</label>
+                                <input type="email" id="client-email" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="contract-section">
+                        <h3>Información de Asignación</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="client-assignment">Asignación</label>
+                                <input type="text" id="client-assignment" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="client-promoter">Promotor</label>
+                                <input type="text" id="client-promoter" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="client-supervisor">Supervisor(a)</label>
+                                <input type="text" id="client-supervisor" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="client-executive">Ejecutivo(a)</label>
+                                <input type="text" id="client-executive" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="button" class="btn btn-primary next-tab" data-next="aval-data">Siguiente: Datos del Aval</button>
+                </div>
+                
+                <div class="tab-content" id="aval-data">
+                    <div class="contract-section">
+                        <h3>Información Personal del Aval</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="aval-name">Nombre completo</label>
+                                <input type="text" id="aval-name" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="aval-birthdate">Fecha de nacimiento</label>
+                                <input type="date" id="aval-birthdate" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="aval-voter-id">Clave de elector</label>
+                                <input type="text" id="aval-voter-id" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="contract-section">
+                        <h3>Dirección del Aval</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="aval-address">Domicilio</label>
+                                <input type="text" id="aval-address" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="aval-neighborhood">Colonia</label>
+                                <input type="text" id="aval-neighborhood" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="aval-zip">Código postal</label>
+                                <input type="text" id="aval-zip" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="aval-municipality">Municipio</label>
+                                <input type="text" id="aval-municipality" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="aval-state">Estado</label>
+                                <input type="text" id="aval-state" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="contract-section">
+                        <h3>Contacto del Aval</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="aval-phone">Teléfono de casa</label>
+                                <input type="tel" id="aval-phone" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="aval-cellphone">Teléfono celular</label>
+                                <input type="tel" id="aval-cellphone" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="aval-message-phone">Teléfono de recados</label>
+                                <input type="tel" id="aval-message-phone" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="aval-email">Correo electrónico</label>
+                                <input type="email" id="aval-email' class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="contract-section">
+                        <h3>Información de Grupo</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="aval-group">Grupo</label>
+                                <input type="text" id="aval-group" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <button type="button" class="btn btn-warning prev-tab" data-prev="client-data">Anterior: Datos del Cliente</button>
+                        <button type="button" class="btn btn-primary next-tab" data-next="contract-data">Siguiente: Datos del Contrato</button>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="contract-data">
+                    <div class="contract-section">
+                        <h3>Datos del Contrato</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="contract-amount">Monto del contrato</label>
+                                <input type="number" id="contract-amount" class="form-control" step="0.01" min="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="contract-interest">Tasa de interés (%)</label>
+                                <input type="number" id="contract-interest" class="form-control" step="0.01" min="0" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="contract-term">Plazo (semanas)</label>
+                                <input type="number" id="contract-term" class="form-control" min="1" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="contract-weekly-payment">Pago semanal</label>
+                                <input type="number" id="contract-weekly-payment" class="form-control" step="0.01" min="0" readonly>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="contract-start-date">Fecha de inicio</label>
+                                <input type="date" id="contract-start-date" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="contract-status">Estado</label>
+                                <select id="contract-status" class="form-control" required>
+                                    <option value="pendiente">Pendiente</option>
+                                    <option value="activo">Activo</option>
+                                    <option value="completado">Completado</option>
+                                    <option value="cancelado">Cancelado</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <button type="button" class="btn btn-warning prev-tab" data-prev="aval-data">Anterior: Datos del Aval</button>
+                        <button type="submit" class="btn btn-success">Guardar Contrato</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- View Contract Modal -->
+    <div id="view-contract-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Detalles del Contrato</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div id="contract-details">
+                <!-- Contract details will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Logout Confirmation Modal -->
+    <div id="logout-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Cerrar Sesión</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="form-group">
+                <p>¿Estás seguro de que deseas cerrar sesión?</p>
+            </div>
+            <div class="logout-confirm-buttons">
+                <button class="btn btn-secondary" id="cancel-logout">Cancelar</button>
+                <button class="btn btn-danger" id="confirm-logout">Cerrar Sesión</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Database initialization
+        function initDatabase() {
+            // Check if database exists
+            if (!localStorage.getItem('financial_db_initialized')) {
+                // Initialize database with default data
+                const defaultData = {
+                    initialized: true,
+                    version: '1.0',
+                    initialized_at: new Date().toISOString()
+                };
+                
+                localStorage.setItem('financial_db', JSON.stringify(defaultData));
+                localStorage.setItem('financial_db_initialized', 'true');
+                
+                // Initialize categories
+                const defaultCategories = [
+                    { id: 1, name: 'Salario', type: 'income' },
+                    { id: 2, name: 'Freelance', type: 'income' },
+                    { id: 3, name: 'Inversiones', type: 'income' },
+                    { id: 4, name: 'Regalos', type: 'income' },
+                    { id: 5, name: 'Alimentación', type: 'expense' },
+                    { id: 6, name: 'Transporte', type: 'expense' },
+                    { id: 7, name: 'Vivienda', type: 'expense' },
+                    { id: 8, name: 'Entretenimiento', type: 'expense' },
+                    { id: 9, name: 'Salud', type: 'expense' },
+                    { id: 10, name: 'Educación', type: 'expense' }
+                ];
+                
+                localStorage.setItem('categories', JSON.stringify(defaultCategories));
+                
+                // Initialize empty arrays for transactions, weeks, contracts, and clients
+                localStorage.setItem('transactions', JSON.stringify([]));
+                localStorage.setItem('weeks', JSON.stringify([]));
+                localStorage.setItem('contracts', JSON.stringify([]));
+                localStorage.setItem('clients', JSON.stringify([]));
+                
+                console.log('Base de datos inicializada correctamente');
+            } else {
+                console.log('Base de datos ya existe');
+            }
+        }
+
+        // Logout function - CORREGIDA
+        function logout() {
+            // Clear all data from localStorage
+            localStorage.removeItem('financial_db');
+            localStorage.removeItem('financial_db_initialized');
+            localStorage.removeItem('categories');
+            localStorage.removeItem('transactions');
+            localStorage.removeItem('weeks');
+            localStorage.removeItem('contracts');
+            localStorage.removeItem('clients');
+            
+            // Redirect to login page in the specified location
+            window.location.href = 'file:///C:/Users/Lehell/Desktop/S.A.Skyline/login.html';
+        }
+
+        // Data management functions
+        function getData(key) {
+            const data = localStorage.getItem(key);
+            return data ? JSON.parse(data) : [];
+        }
+
+        function saveData(key, data) {
+            localStorage.setItem(key, JSON.stringify(data));
+        }
+
+        function addTransaction(transaction) {
+            const transactions = getData('transactions');
+            transaction.id = Date.now(); // Simple ID generation
+            transactions.push(transaction);
+            saveData('transactions', transactions);
+            return transaction;
+        }
+
+        function getTransactionsByWeek(weekId) {
+            const transactions = getData('transactions');
+            return transactions.filter(t => t.week === weekId);
+        }
+
+        function addWeek(week) {
+            const weeks = getData('weeks');
+            week.id = Date.now(); // Simple ID generation
+            week.created_at = new Date().toISOString();
+            weeks.push(week);
+            saveData('weeks', weeks);
+            return week;
+        }
+
+        function addContract(contract) {
+            const contracts = getData('contracts');
+            contract.id = Date.now(); // Simple ID generation
+            contract.folio = 'CTR-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+            contract.created_at = new Date().toISOString();
+            contracts.push(contract);
+            saveData('contracts', contracts);
+            
+            // Also save client if not exists
+            const clients = getData('clients');
+            const clientExists = clients.some(c => c.cellphone === contract.client.cellphone);
+            if (!clientExists) {
+                clients.push(contract.client);
+                saveData('clients', clients);
+            }
+            
+            return contract;
+        }
+
+        function getCurrentWeek() {
+            const weeks = getData('weeks');
+            if (weeks.length === 0) return null;
+            
+            // Try to find the week that contains the current date
+            const today = new Date();
+            return weeks.find(week => {
+                const start = new Date(week.start_date);
+                const end = new Date(start);
+                end.setDate(start.getDate() + 6);
+                return today >= start && today <= end;
+            }) || weeks[weeks.length - 1]; // Return the last week if no current week found
+        }
+
+        // UI Functions
+        function updateUI() {
+            updateWeeksDropdown();
+            updateCategoriesDropdown();
+            updateTransactionsTable();
+            updateDashboard();
+            updateContractsTable();
+            updateClientsTable();
+        }
+
+        function updateWeeksDropdown() {
+            const weeks = getData('weeks');
+            const weekSelect = document.getElementById('week-select');
+            const filterWeek = document.getElementById('filter-week');
+            const transactionWeek = document.getElementById('transaction-week');
+            
+            // Clear existing options
+            weekSelect.innerHTML = '';
+            filterWeek.innerHTML = '<option value="all">Todas las semanas</option>';
+            transactionWeek.innerHTML = '';
+            
+            if (weeks.length === 0) {
+                weekSelect.innerHTML = '<option value="">No hay semanas</option>';
+                return;
+            }
+            
+            // Add weeks to dropdowns
+            weeks.forEach(week => {
+                const startDate = new Date(week.start_date);
+                const optionText = `Semana ${formatDate(startDate)}`;
+                
+                const option = document.createElement('option');
+                option.value = week.id;
+                option.textContent = optionText;
+                weekSelect.appendChild(option);
+                
+                const filterOption = option.cloneNode(true);
+                filterWeek.appendChild(filterOption);
+                
+                const transactionOption = option.cloneNode(true);
+                transactionWeek.appendChild(transactionOption);
+            });
+            
+            // Select current week
+            const currentWeek = getCurrentWeek();
+            if (currentWeek) {
+                weekSelect.value = currentWeek.id;
+            } else {
+                weekSelect.value = weeks[0].id;
+            }
+        }
+
+        function updateCategoriesDropdown() {
+            const categories = getData('categories');
+            const categorySelect = document.getElementById('transaction-category');
+            const filterCategory = document.getElementById('filter-category');
+            
+            // Clear existing options
+            categorySelect.innerHTML = '';
+            filterCategory.innerHTML = '<option value="all">Todas las categorías</option>';
+            
+            // Add categories to dropdowns
+            categories.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category.id;
+                option.textContent = category.name;
+                categorySelect.appendChild(option);
+                
+                const filterOption = option.cloneNode(true);
+                filterCategory.appendChild(filterOption);
+            });
+        }
+
+        function updateTransactionsTable() {
+            const transactions = getData('transactions');
+            const tableBody = document.querySelector('#transactions-table tbody');
+            const filterType = document.getElementById('filter-type').value;
+            const filterCategory = document.getElementById('filter-category').value;
+            const filterWeek = document.getElementById('filter-week').value;
+            
+            // Clear table
+            tableBody.innerHTML = '';
+            
+            // Filter transactions
+            let filteredTransactions = transactions;
+            
+            if (filterType !== 'all') {
+                filteredTransactions = filteredTransactions.filter(t => t.type === filterType);
+            }
+            
+            if (filterCategory !== 'all') {
+                filteredTransactions = filteredTransactions.filter(t => t.category == filterCategory);
+            }
+            
+            if (filterWeek !== 'all') {
+                filteredTransactions = filteredTransactions.filter(t => t.week == filterWeek);
+            }
+            
+            // Add transactions to table
+            if (filteredTransactions.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center;">No hay transacciones</td></tr>';
+                return;
+            }
+            
+            filteredTransactions.forEach(transaction => {
+                const row = document.createElement('tr');
+                
+                const categories = getData('categories');
+                const category = categories.find(c => c.id == transaction.category);
+                const weeks = getData('weeks');
+                const week = weeks.find(w => w.id == transaction.week);
+                
+                row.innerHTML = `
+                    <td>${formatDate(new Date(transaction.date))}</td>
+                    <td>${transaction.description}</td>
+                    <td>${category ? category.name : 'N/A'}</td>
+                    <td>${transaction.type === 'income' ? 'Ingreso' : 'Gasto'}</td>
+                    <td class="${transaction.type === 'income' ? 'income' : 'expense'}">${transaction.type === 'income' ? '+' : '-'}$${transaction.amount.toFixed(2)}</td>
+                    <td>
+                        <button class="btn btn-danger btn-sm delete-transaction" data-id="${transaction.id}">Eliminar</button>
+                    </td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+            
+            // Add event listeners to delete buttons
+            document.querySelectorAll('.delete-transaction').forEach(button => {
+                button.addEventListener('click', function() {
+                    const transactionId = this.getAttribute('data-id');
+                    deleteTransaction(transactionId);
+                });
+            });
+        }
+
+        function updateContractsTable() {
+            const contracts = getData('contracts');
+            const tableBody = document.querySelector('#contracts-table tbody');
+            const searchTerm = document.getElementById('search-contract').value.toLowerCase();
+            const filterStatus = document.getElementById('filter-status').value;
+            
+            // Clear table
+            tableBody.innerHTML = '';
+            
+            // Filter contracts
+            let filteredContracts = contracts;
+            
+            if (searchTerm) {
+                filteredContracts = filteredContracts.filter(contract => 
+                    contract.client.name.toLowerCase().includes(searchTerm) ||
+                    contract.folio.toLowerCase().includes(searchTerm) ||
+                    contract.status.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            if (filterStatus !== 'all') {
+                filteredContracts = filteredContracts.filter(contract => contract.status === filterStatus);
+            }
+            
+            // Add contracts to table
+            if (filteredContracts.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center;">No hay contratos</td></tr>';
+                return;
+            }
+            
+            filteredContracts.forEach(contract => {
+                const row = document.createElement('tr');
+                
+                row.innerHTML = `
+                    <td>${contract.folio}</td>
+                    <td>${contract.client.name}</td>
+                    <td>$${contract.amount.toFixed(2)}</td>
+                    <td>${formatDate(new Date(contract.start_date))}</td>
+                    <td><span class="badge ${getStatusBadgeClass(contract.status)}">${contract.status}</span></td>
+                    <td>
+                        <button class="btn btn-info btn-sm view-contract" data-id="${contract.id}">Ver</button>
+                        <button class="btn btn-danger btn-sm delete-contract" data-id="${contract.id}">Eliminar</button>
+                    </td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+            
+            // Add event listeners to buttons
+            document.querySelectorAll('.view-contract').forEach(button => {
+                button.addEventListener('click', function() {
+                    const contractId = this.getAttribute('data-id');
+                    viewContract(contractId);
+                });
+            });
+            
+            document.querySelectorAll('.delete-contract').forEach(button => {
+                button.addEventListener('click', function() {
+                    const contractId = this.getAttribute('data-id');
+                    deleteContract(contractId);
+                });
+            });
+        }
+
+        function updateClientsTable() {
+            const clients = getData('clients');
+            const tableBody = document.querySelector('#clients-table tbody');
+            const searchTerm = document.getElementById('search-client').value.toLowerCase();
+            
+            // Clear table
+            tableBody.innerHTML = '';
+            
+            // Filter clients
+            let filteredClients = clients;
+            
+            if (searchTerm) {
+                filteredClients = filteredClients.filter(client => 
+                    client.name.toLowerCase().includes(searchTerm) ||
+                    client.cellphone.toLowerCase().includes(searchTerm) ||
+                    (client.email && client.email.toLowerCase().includes(searchTerm))
+                );
+            }
+            
+            // Add clients to table
+            if (filteredClients.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center;">No hay clientes</td></tr>';
+                return;
+            }
+            
+            filteredClients.forEach(client => {
+                const row = document.createElement('tr');
+                
+                // Count contracts for this client
+                const contracts = getData('contracts');
+                const clientContracts = contracts.filter(c => c.client.cellphone === client.cellphone);
+                
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.cellphone}</td>
+                    <td>${client.email || 'N/A'}</td>
+                    <td>${clientContracts.length}</td>
+                    <td>
+                        <button class="btn btn-info btn-sm view-client" data-id="${client.cellphone}">Ver</button>
+                    </td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+        }
+
+        function updateDashboard() {
+            const weekSelect = document.getElementById('week-select');
+            const weekId = weekSelect.value;
+            
+            if (!weekId) {
+                document.getElementById('week-income').textContent = '$0.00';
+                document.getElementById('week-expenses').textContent = '$0.00';
+                document.getElementById('week-balance').textContent = '$0.00';
+                document.getElementById('week-budget').textContent = '$0.00';
+                return;
+            }
+            
+            const transactions = getData('transactions');
+            const weeks = getData('weeks');
+            const week = weeks.find(w => w.id == weekId);
+            
+            const weekTransactions = transactions.filter(t => t.week == weekId);
+            const income = weekTransactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+            const expenses = weekTransactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
+            const balance = income - expenses;
+            const budgetLeft = week.budget - expenses;
+            
+            document.getElementById('week-income').textContent = `$${income.toFixed(2)}`;
+            document.getElementById('week-expenses').textContent = `$${expenses.toFixed(2)}`;
+            document.getElementById('week-balance').textContent = `$${balance.toFixed(2)}`;
+            document.getElementById('week-budget').textContent = `$${budgetLeft.toFixed(2)}`;
+            
+            // Update recent transactions
+            const recentTransactionsBody = document.querySelector('#recent-transactions tbody');
+            recentTransactionsBody.innerHTML = '';
+            
+            const recentTransactions = weekTransactions.slice(-5).reverse();
+            
+            if (recentTransactions.length === 0) {
+                recentTransactionsBody.innerHTML = '<tr><td colspan="5" style="text-align: center;">No hay transacciones esta semana</td></tr>';
+                return;
+            }
+            
+            recentTransactions.forEach(transaction => {
+                const row = document.createElement('tr');
+                
+                const categories = getData('categories');
+                const category = categories.find(c => c.id == transaction.category);
+                
+                row.innerHTML = `
+                    <td>${formatDate(new Date(transaction.date))}</td>
+                    <td>${transaction.description}</td>
+                    <td>${category ? category.name : 'N/A'}</td>
+                    <td>${transaction.type === 'income' ? 'Ingreso' : 'Gasto'}</td>
+                    <td class="${transaction.type === 'income' ? 'income' : 'expense'}">${transaction.type === 'income' ? '+' : '-'}$${transaction.amount.toFixed(2)}</td>
+                `;
+                
+                recentTransactionsBody.appendChild(row);
+            });
+        }
+
+        function deleteTransaction(id) {
+            if (!confirm('¿Estás seguro de que quieres eliminar esta transacción?')) return;
+            
+            const transactions = getData('transactions');
+            const updatedTransactions = transactions.filter(t => t.id != id);
+            saveData('transactions', updatedTransactions);
+            
+            updateUI();
+        }
+
+        function deleteContract(id) {
+            if (!confirm('¿Estás seguro de que quieres eliminar este contrato?')) return;
+            
+            const contracts = getData('contracts');
+            const updatedContracts = contracts.filter(c => c.id != id);
+            saveData('contracts', updatedContracts);
+            
+            updateUI();
+        }
+
+        function viewContract(id) {
+            const contracts = getData('contracts');
+            const contract = contracts.find(c => c.id == id);
+            
+            if (!contract) {
+                alert('Contrato no encontrado');
+                return;
+            }
+            
+            const modal = document.getElementById('view-contract-modal');
+            const details = document.getElementById('contract-details');
+            
+            details.innerHTML = `
+                <div class="contract-section">
+                    <h3>Información del Contrato</h3>
+                    <p><strong>Folio:</strong> ${contract.folio}</p>
+                    <p><strong>Monto:</strong> $${contract.amount.toFixed(2)}</p>
+                    <p><strong>Tasa de interés:</strong> ${contract.interest}%</p>
+                    <p><strong>Plazo:</strong> ${contract.term} semanas</p>
+                    <p><strong>Pago semanal:</strong> $${contract.weekly_payment.toFixed(2)}</p>
+                    <p><strong>Fecha de inicio:</strong> ${formatDate(new Date(contract.start_date))}</p>
+                    <p><strong>Estado:</strong> <span class="badge ${getStatusBadgeClass(contract.status)}">${contract.status}</span></p>
+                </div>
+                
+                <div class="contract-section">
+                    <h3>Información del Cliente</h3>
+                    <p><strong>Nombre:</strong> ${contract.client.name}</p>
+                    <p><strong>Fecha de nacimiento:</strong> ${formatDate(new Date(contract.client.birthdate))}</p>
+                    <p><strong>Clave de elector:</strong> ${contract.client.voter_id}</p>
+                    <p><strong>Dirección:</strong> ${contract.client.address}, ${contract.client.neighborhood}, ${contract.client.municipality}, ${contract.client.state}, C.P. ${contract.client.zip}</p>
+                    <p><strong>Teléfonos:</strong> Casa: ${contract.client.phone || 'N/A'}, Celular: ${contract.client.cellphone}, Recados: ${contract.client.message_phone || 'N/A'}</p>
+                    <p><strong>Email:</strong> ${contract.client.email || 'N/A'}</p>
+                    <p><strong>Asignación:</strong> ${contract.client.assignment || 'N/A'}</p>
+                    <p><strong>Promotor:</strong> ${contract.client.promoter}</p>
+                    <p><strong>Supervisor:</strong> ${contract.client.supervisor}</p>
+                    <p><strong>Ejecutivo:</strong> ${contract.client.executive}</p>
+                </div>
+                
+                <div class="contract-section">
+                    <h3>Información del Aval</h3>
+                    <p><strong>Nombre:</strong> ${contract.aval.name}</p>
+                    <p><strong>Fecha de nacimiento:</strong> ${formatDate(new Date(contract.aval.birthdate))}</p>
+                    <p><strong>Clave de elector:</strong> ${contract.aval.voter_id}</p>
+                    <p><strong>Dirección:</strong> ${contract.aval.address}, ${contract.aval.neighborhood}, ${contract.aval.municipality}, ${contract.aval.state}, C.P. ${contract.aval.zip}</p>
+                    <p><strong>Teléfonos:</strong> Casa: ${contract.aval.phone || 'N/A'}, Celular: ${contract.aval.cellphone}, Recados: ${contract.aval.message_phone || 'N/A'}</p>
+                    <p><strong>Email:</strong> ${contract.aval.email || 'N/A'}</p>
+                    <p><strong>Grupo:</strong> ${contract.aval.group}</p>
+                </div>
+            `;
+            
+            modal.style.display = 'flex';
+        }
+
+        function formatDate(date) {
+            return date.toLocaleDateString('es-ES', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+        }
+
+        function getStatusBadgeClass(status) {
+            switch(status) {
+                case 'activo': return 'bg-success';
+                case 'pendiente': return 'bg-warning';
+                case 'completado': return 'bg-info';
+                case 'cancelado': return 'bg-danger';
+                default: return 'bg-secondary';
+            }
+        }
+
+        function calculateWeeklyPayment(amount, interest, term) {
+            const weeklyRate = interest / 100 / 52;
+            if (weeklyRate === 0) return amount / term;
+            return (amount * weeklyRate) / (1 - Math.pow(1 + weeklyRate, -term));
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize database
+            initDatabase();
+            
+            // Update UI with data
+            updateUI();
+            
+            // Navigation
+            document.querySelectorAll('.sidebar-menu a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remove active class from all links
+                    document.querySelectorAll('.sidebar-menu a').forEach(l => l.classList.remove('active'));
+                    
+                    // Add active class to clicked link
+                    this.classList.add('active');
+                    
+                    // Show corresponding section
+                    const sectionId = this.getAttribute('data-section') + '-section';
+                    document.querySelectorAll('.content > div').forEach(div => {
+                        div.classList.add('hidden');
+                    });
+                    document.getElementById(sectionId).classList.remove('hidden');
+                });
+            });
+            
+            // Modal handling
+            const transactionModal = document.getElementById('transaction-modal');
+            const weekModal = document.getElementById('week-modal');
+            const contractModal = document.getElementById('contract-modal');
+            const viewContractModal = document.getElementById('view-contract-modal');
+            const logoutModal = document.getElementById('logout-modal');
+            
+            document.getElementById('add-transaction-btn').addEventListener('click', function() {
+                transactionModal.style.display = 'flex';
+            });
+            
+            document.getElementById('add-week-btn').addEventListener('click', function() {
+                weekModal.style.display = 'flex';
+            });
+            
+            document.getElementById('add-contract-btn').addEventListener('click', function() {
+                contractModal.style.display = 'flex';
+            });
+            
+            document.getElementById('view-contracts-btn').addEventListener('click', function() {
+                updateContractsTable();
+            });
+            
+            document.getElementById('add-client-btn').addEventListener('click', function() {
+                // For simplicity, we'll just open the contract modal
+                // In a real application, you might have a separate client form
+                contractModal.style.display = 'flex';
+            });
+            
+            // Logout button
+            document.getElementById('logout-btn').addEventListener('click', function(e) {
+                e.preventDefault();
+                logoutModal.style.display = 'flex';
+            });
+            
+            // Logout confirmation
+            document.getElementById('confirm-logout').addEventListener('click', function() {
+                logout();
+            });
+            
+            // Cancel logout
+            document.getElementById('cancel-logout').addEventListener('click', function() {
+                logoutModal.style.display = 'none';
+            });
+            
+            document.querySelectorAll('.close').forEach(closeBtn => {
+                closeBtn.addEventListener('click', function() {
+                    transactionModal.style.display = 'none';
+                    weekModal.style.display = 'none';
+                    contractModal.style.display = 'none';
+                    viewContractModal.style.display = 'none';
+                    logoutModal.style.display = 'none';
+                });
+            });
+            
+            // Close modal when clicking outside
+            window.addEventListener('click', function(e) {
+                if (e.target === transactionModal) {
+                    transactionModal.style.display = 'none';
+                }
+                if (e.target === weekModal) {
+                    weekModal.style.display = 'none';
+                }
+                if (e.target === contractModal) {
+                    contractModal.style.display = 'none';
+                }
+                if (e.target === viewContractModal) {
+                    viewContractModal.style.display = 'none';
+                }
+                if (e.target === logoutModal) {
+                    logoutModal.style.display = 'none';
+                }
+            });
+            
+            // Tab navigation in contract form
+            document.querySelectorAll('.next-tab').forEach(button => {
+                button.addEventListener('click', function() {
+                    const currentTab = this.closest('.tab-content');
+                    const nextTabId = this.getAttribute('data-next');
+                    
+                    currentTab.classList.remove('active');
+                    document.getElementById(nextTabId).classList.add('active');
+                    
+                    // Update tabs UI
+                    document.querySelectorAll('.tab').forEach(tab => {
+                        tab.classList.remove('active');
+                    });
+                    document.querySelector(`.tab[data-tab="${nextTabId}"]`).classList.add('active');
+                });
+            });
+            
+            document.querySelectorAll('.prev-tab').forEach(button => {
+                button.addEventListener('click', function() {
+                    const currentTab = this.closest('.tab-content');
+                    const prevTabId = this.getAttribute('data-prev');
+                    
+                    currentTab.classList.remove('active');
+                    document.getElementById(prevTabId).classList.add('active');
+                    
+                    // Update tabs UI
+                    document.querySelectorAll('.tab').forEach(tab => {
+                        tab.classList.remove('active');
+                    });
+                    document.querySelector(`.tab[data-tab="${prevTabId}"]`).classList.add('active');
+                });
+            });
+            
+            // Tab clicks
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    // Update tabs UI
+                    document.querySelectorAll('.tab').forEach(t => {
+                        t.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                    
+                    // Show corresponding content
+                    document.querySelectorAll('.tab-content').forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+            
+            // Calculate weekly payment when amount, interest or term changes
+            document.getElementById('contract-amount').addEventListener('input', calculatePayment);
+            document.getElementById('contract-interest').addEventListener('input', calculatePayment);
+            document.getElementById('contract-term').addEventListener('input', calculatePayment);
+            
+            function calculatePayment() {
+                const amount = parseFloat(document.getElementById('contract-amount').value) || 0;
+                const interest = parseFloat(document.getElementById('contract-interest').value) || 0;
+                const term = parseInt(document.getElementById('contract-term').value) || 1;
+                
+                const weeklyPayment = calculateWeeklyPayment(amount, interest, term);
+                document.getElementById('contract-weekly-payment').value = weeklyPayment.toFixed(2);
+            }
+            
+            // Form submissions
+            document.getElementById('transaction-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const transaction = {
+                    date: document.getElementById('transaction-date').value,
+                    description: document.getElementById('transaction-description').value,
+                    type: document.getElementById('transaction-type').value,
+                    category: parseInt(document.getElementById('transaction-category').value),
+                    amount: parseFloat(document.getElementById('transaction-amount').value),
+                    week: parseInt(document.getElementById('transaction-week').value)
+                };
+                
+                addTransaction(transaction);
+                updateUI();
+                
+                // Reset form and close modal
+                this.reset();
+                transactionModal.style.display = 'none';
+                
+                alert('Transacción agregada correctamente!');
+            });
+            
+            document.getElementById('week-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const week = {
+                    start_date: document.getElementById('week-start').value,
+                    budget: parseFloat(document.getElementById('week-budget-input').value)
+                };
+                
+                addWeek(week);
+                updateUI();
+                
+                // Reset form and close modal
+                this.reset();
+                weekModal.style.display = 'none';
+                
+                alert('Semana financiera creada correctamente!');
+            });
+            
+            document.getElementById('contract-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const contract = {
+                    client: {
+                        name: document.getElementById('client-name').value,
+                        birthdate: document.getElementById('client-birthdate').value,
+                        voter_id: document.getElementById('client-voter-id').value,
+                        address: document.getElementById('client-address').value,
+                        neighborhood: document.getElementById('client-neighborhood').value,
+                        zip: document.getElementById('client-zip').value,
+                        municipality: document.getElementById('client-municipality').value,
+                        state: document.getElementById('client-state').value,
+                        phone: document.getElementById('client-phone').value,
+                        cellphone: document.getElementById('client-cellphone').value,
+                        message_phone: document.getElementById('client-message-phone').value,
+                        email: document.getElementById('client-email').value,
+                        assignment: document.getElementById('client-assignment').value,
+                        promoter: document.getElementById('client-promoter').value,
+                        supervisor: document.getElementById('client-supervisor').value,
+                        executive: document.getElementById('client-executive').value
+                    },
+                    aval: {
+                        name: document.getElementById('aval-name').value,
+                        birthdate: document.getElementById('aval-birthdate').value,
+                        voter_id: document.getElementById('aval-voter-id').value,
+                        address: document.getElementById('aval-address').value,
+                        neighborhood: document.getElementById('aval-neighborhood').value,
+                        zip: document.getElementById('aval-zip').value,
+                        municipality: document.getElementById('aval-municipality').value,
+                        state: document.getElementById('aval-state').value,
+                        phone: document.getElementById('aval-phone').value,
+                        cellphone: document.getElementById('aval-cellphone').value,
+                        message_phone: document.getElementById('aval-message-phone').value,
+                        email: document.getElementById('aval-email').value,
+                        group: document.getElementById('aval-group').value
+                    },
+                    amount: parseFloat(document.getElementById('contract-amount').value),
+                    interest: parseFloat(document.getElementById('contract-interest').value),
+                    term: parseInt(document.getElementById('contract-term').value),
+                    weekly_payment: parseFloat(document.getElementById('contract-weekly-payment').value),
+                    start_date: document.getElementById('contract-start-date').value,
+                    status: document.getElementById('contract-status').value
+                };
+                
+                addContract(contract);
+                updateUI();
+                
+                // Reset form and close modal
+                this.reset();
+                contractModal.style.display = 'none';
+                
+                alert('Contrato agregado correctamente!');
+            });
+            
+            // Week navigation
+            document.getElementById('prev-week').addEventListener('click', function() {
+                const weekSelect = document.getElementById('week-select');
+                const currentIndex = Array.from(weekSelect.options).findIndex(option => option.value === weekSelect.value);
+                if (currentIndex > 0) {
+                    weekSelect.selectedIndex = currentIndex - 1;
+                    updateDashboard();
+                }
+            });
+            
+            document.getElementById('next-week').addEventListener('click', function() {
+                const weekSelect = document.getElementById('week-select');
+                const currentIndex = Array.from(weekSelect.options).findIndex(option => option.value === weekSelect.value);
+                if (currentIndex < weekSelect.options.length - 1) {
+                    weekSelect.selectedIndex = currentIndex + 1;
+                    updateDashboard();
+                }
+            });
+            
+            // Filter changes
+            document.getElementById('filter-type').addEventListener('change', updateTransactionsTable);
+            document.getElementById('filter-category').addEventListener('change', updateTransactionsTable);
+            document.getElementById('filter-week').addEventListener('change', updateTransactionsTable);
+            document.getElementById('filter-status').addEventListener('change', updateContractsTable);
+            
+            // Search functionality
+            document.getElementById('search-btn').addEventListener('click', updateContractsTable);
+            document.getElementById('search-contract').addEventListener('keyup', function(e) {
+                if (e.key === 'Enter') {
+                    updateContractsTable();
+                }
+            });
+            
+            document.getElementById('search-client-btn').addEventListener('click', updateClientsTable);
+            document.getElementById('search-client').addEventListener('keyup', function(e) {
+                if (e.key === 'Enter') {
+                    updateClientsTable();
+                }
+            });
+            
+            // Week selection change
+            document.getElementById('week-select').addEventListener('change', updateDashboard);
+        });
+    </script>
+</body>
+</html>
